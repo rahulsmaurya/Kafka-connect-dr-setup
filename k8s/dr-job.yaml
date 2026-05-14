@@ -1,0 +1,25 @@
+
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: kafka-dr-failover
+  namespace: kafka-dr
+
+spec:
+  backoffLimit: 2
+
+  template:
+    spec:
+      containers:
+      - name: dr-runner
+        image: myacr.azurecr.io/kafka-dr-tools:latest
+
+        env:
+        - name: PRIMARY_CONNECT_URL
+          value: "http://primary-connect:8083"
+
+        - name: DR_CONNECT_URL
+          value: "http://dr-connect:8083"
+
+      restartPolicy: Never
